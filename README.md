@@ -1,144 +1,193 @@
 # IR Project with Web Crawler Integration
 
-This project extends the Information Retrieval (IR) application with a Python web crawler to collect and index documents from the internet.
+[![Java](https://img.shields.io/badge/Java-8-red.svg)](https://www.oracle.com/java/)
+[![Python](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/)
+[![Maven](https://img.shields.io/badge/Maven-3.8+-green.svg)](https://maven.apache.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Overview
+This project implements an Information Retrieval (IR) system with a web crawler integration. It combines a Java-based IR application using Apache Lucene with a Python web crawler to collect and index academic papers from the internet.
 
-The project consists of two main components:
+## 🌟 Features
 
-1. **Java IR Application** - An Information Retrieval system built with Apache Lucene that processes and indexes documents in the Cranfield format, performs queries, and evaluates results.
+- **Web Crawler**
+  - Fetches academic papers from specified URLs
+  - Extracts title, author, and content
+  - Formats documents in Cranfield format
+  - Generates sample queries and relevance judgments
 
-2. **Python Web Crawler** - A web crawler that fetches academic papers from the internet and formats them to be compatible with the IR application.
+- **IR System**
+  - Document indexing using Apache Lucene
+  - Multiple analyzer options (Standard, Whitespace, English)
+  - Different similarity models (VSM, BM25)
+  - Query processing and result evaluation
+  - Performance metrics calculation (Precision, Recall, MAP)
 
-## Requirements
+## 🛠️ Technology Stack
 
 ### Java Application
 - Java 8 or higher
-- Maven
+- Apache Lucene for indexing and searching
+- Maven for dependency management
+- JUnit for testing
 
 ### Python Web Crawler
 - Python 3.6 or higher
-- Required Python packages (install with `pip install -r requirements.txt`):
-  - requests
-  - beautifulsoup4
-  - argparse
+- BeautifulSoup4 for HTML parsing
+- Requests for HTTP requests
+- Concurrent processing for efficient crawling
 
-### Setting up Virtual Environment (Recommended)
-1. Create a virtual environment:
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Java JDK 8 or higher
+- Python 3.6 or higher
+- Maven 3.8 or higher
+- Git (for cloning the repository)
+
+## 🚀 Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/abdo544445/IR-Project.git
+   cd IR-Project
+   ```
+
+2. Set up Python virtual environment:
    ```bash
    python -m venv venv
+   source venv/bin/activate  # On Linux/Mac
+   # or
+   .\venv\Scripts\activate  # On Windows
    ```
 
-2. Activate the virtual environment:
-   - On Linux/Mac:
-     ```bash
-     source venv/bin/activate
-     ```
-   - On Windows:
-     ```bash
-     .\venv\Scripts\Activate.ps1
-     ```
-
-3. Install dependencies in the virtual environment:
+3. Install Python dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. When you're done, you can deactivate the virtual environment:
+4. Install Java dependencies:
    ```bash
-   deactivate
-   ```
-
-## Setup
-
-1. Clone the repository
-2. Install Java dependencies using Maven:
-   ```
    mvn clean install
    ```
-3. Install Python dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
 
-## Usage
+## 💻 Usage
 
 ### Running the Web Crawler
 
-The web crawler can be run independently:
-
-```
+Run the crawler independently:
+```bash
 python web_crawler.py --urls https://arxiv.org/list/cs.IR/recent --max-pages 50
 ```
 
-Options:
-- `--urls`: One or more starting URLs (separated by spaces)
+#### Crawler Options
+- `--urls`: Starting URLs (space-separated)
 - `--output`: Output directory (default: src/main/resources/crawled)
-- `--max-pages`: Maximum number of pages to crawl (default: 100)
-- `--delay`: Delay between requests in seconds (default: 1.0)
-- `--workers`: Number of concurrent workers (default: 5)
+- `--max-pages`: Maximum pages to crawl (default: 100)
+- `--delay`: Request delay in seconds (default: 1.0)
+- `--workers`: Concurrent workers (default: 5)
 
-### Integrating with the Java Application
+### Running with Java Integration
 
-To run the crawler and integrate with the Java application:
-
-```
+Run crawler and Java application together:
+```bash
 python run_crawler.py --urls https://arxiv.org/list/cs.IR/recent --max-pages 50 --run-java
 ```
 
-This will:
-1. Run the web crawler to collect documents
-2. Format the documents in Cranfield format
-3. Create query and relevance judgment files
-4. Set up the files for the Java application
-5. Optionally run the Java application (with --run-java flag)
+### Running Java Application Manually
 
-### Running the Java Application Manually
-
-After running the crawler, you can run the Java application manually:
-
-```
+```bash
 mvn clean compile exec:java -Dexec.mainClass=IR.App
 ```
- 
 
-## How It Works
+## 📁 Project Structure
 
-1. The web crawler starts from the provided URLs and collects academic papers.
-2. The papers are processed and formatted according to the Cranfield format used by the IR application.
-3. The crawler creates three main files:
-   - `cran.all.crawled`: Contains the formatted documents
-   - `cran.qry.crawled`: Contains sample queries generated from document titles
-   - `cranqrel`: Contains relevance judgments for evaluation
+```
+IR-Project/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── IR/
+│       │       ├── App.java                 # Main application entry point
+│       │       ├── CranQuery.java           # Query parsing and handling
+│       │       ├── CreateIndex.java         # Document indexing
+│       │       ├── Evaluation.java          # Search result evaluation
+│       │       ├── EvaluationMetrics.java   # Evaluation metrics calculation
+│       │       ├── QueryIndex.java          # Query processing and results
+│       │       └── SearchResult.java        # Search result representation
+│       └── resources/
+│           ├── cran/                        # Standard Cranfield dataset
+│           ├── crawled/                     # Web crawler output
+│           └── results/                     # Search results
+├── web_crawler.py                          # Main crawler implementation
+├── run_crawler.py                          # Integration script
+├── requirements.txt                        # Python dependencies
+└── pom.xml                                # Maven configuration
+```
 
-4. The integration script copies these files to the locations expected by the Java application.
-5. The Java application indexes the documents, processes queries, and evaluates results using the Lucene framework.
+## 🔧 Configuration
 
-## Customization
+### Java Application
+- Analyzer options:
+  1. Standard Analyzer
+  2. Whitespace Analyzer
+  3. English Analyzer
 
-You can customize the crawler behavior by modifying:
+- Similarity methods:
+  1. Vector Space Model (VSM)
+  2. BM25 Similarity
 
-- Starting URLs: Use `--urls` to specify different academic sources
-- Crawl depth: Adjust `--max-pages` to control how many documents are collected
-- Integration: Edit `run_crawler.py` to change how files are prepared for the Java application
+### Web Crawler
+- Customize crawling behavior in `web_crawler.py`
+- Adjust output formats in `run_crawler.py`
 
-## Recent Changes
+## 📊 Performance Metrics
+
+The system evaluates search results using:
+- Precision@25
+- Recall
+- Mean Average Precision (MAP)
+
+## 🔄 Recent Updates
 
 ### Java Application Updates
-The Java application has been modified to handle missing directories:
+- Added automatic creation of results directory
+- Improved error handling
+- Enhanced evaluation metrics
 
-- `QueryIndex.java`: Added automatic creation of the results directory if it doesn't exist
-  ```java
-  // Create results directory if it doesn't exist
-  File resultsDir = new File(RESULTS_DIRECTORY);
-  if (!resultsDir.exists()) {
-      resultsDir.mkdirs();
-  }
-  ```
-  This change fixes the `FileNotFoundException` error that occurred when trying to save search results.
+## 🐛 Troubleshooting
 
-## Troubleshooting
+### Common Issues
+1. **Missing Files**
+   - Check output directory for crawler results
+   - Verify file permissions
 
-- **Missing Files**: Ensure the crawler has completed successfully by checking the output directory
-- **Java Application Errors**: Check the Java application logs for specific error messages
-- **Crawler Issues**: Check the crawler.log file for details on any crawling problems 
+2. **Java Application Errors**
+   - Ensure Maven dependencies are installed
+   - Check Java version compatibility
+
+3. **Crawler Issues**
+   - Review crawler.log for detailed error messages
+   - Check network connectivity
+   - Verify URL accessibility
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Authors
+
+- Your Name - Initial work
+
+## 🙏 Acknowledgments
+
+- Apache Lucene team for the excellent IR framework
+- BeautifulSoup4 and Requests libraries for web scraping capabilities
+- The academic community for providing open access to research papers 
